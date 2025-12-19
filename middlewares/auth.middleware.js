@@ -1,0 +1,34 @@
+import { config } from "dotenv";
+config({
+    path:"./.env",
+    quiet:true
+    
+})
+import jwt from "jsonwebtoken";
+import ApiError from "../utils/error.util.js";
+
+
+export const isLoggedIn = async (req, res, next) =>{
+   try {
+     const token = req.cookies && req.cookies?.token || req.header("Authorization")?.replace("Bearer ", "");
+     //const {token} = req.cookies;
+     //console.log( req.cookies);
+     
+     if(!token){
+         return next( new ApiError("Unauthenticated user , please login try agin ", 401));
+     }
+     //console.log("token: ", token);
+     
+     const userDetail = await jwt.verify(token,process.env.JWT_SECRET);
+     //console.log(userDetail);
+     
+     req.user = userDetail;
+
+     next();
+
+   } catch (error) {
+    return next(new ApiError(error.message,400));
+    
+   }
+   
+}

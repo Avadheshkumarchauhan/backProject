@@ -1,0 +1,18 @@
+import {Router} from 'express';
+import {register,login,logout,getProfile} from '../controllers/user.controller.js';
+import { isLoggedIn } from '../middlewares/auth.middleware.js';
+import { upload } from '../middlewares/multer.middleware.js';
+
+const routers =Router();
+
+routers.post('/register',
+    upload.single(
+      "avatar"        
+      ),register);
+routers.post('/login',login);
+routers.get('/logout',isLoggedIn,logout);
+routers.get('/profile',isLoggedIn,getProfile);
+
+
+
+export default routers;
