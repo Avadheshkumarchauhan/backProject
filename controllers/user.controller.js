@@ -61,10 +61,10 @@ const login = async (req,res, next) =>{
          return next(new ApiError("All fiels are required" , 400));
      }
      const user =await User.findOne({email}).select("+password");
-     console.log(user.password);
+     
      
  
-     if (!user|| !(await bcrypt.compare(password , user.password))) {
+     if (!(user && (await bcrypt.compare(password , user.password)))) {
          return next(new ApiError("Email and password does not match", 400));
      }
      const token = user.generateToken();
@@ -79,7 +79,7 @@ const login = async (req,res, next) =>{
         user
      })
    } catch (error) {
-        return next(new ApiError(e.message,500));
+        return next(new ApiError(error.message,500));
    }
 
 }
