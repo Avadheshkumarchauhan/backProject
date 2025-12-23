@@ -53,7 +53,7 @@ const register = async (req,res ,next) =>{
             return next(new ApiError("User registation failed , please try again",400));
         }
         await user.save({validateBeforeSave:false});
-        const token = user.generateToken();
+        //const token = user.generateToken();
     
         user.password = undefined;
     
