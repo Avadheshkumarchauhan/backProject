@@ -76,6 +76,7 @@ const login = async (req,res, next) =>{
             return next(new ApiError("All fiels are required" , 400));
         }
         const user =await User.findOne({email}).select("+password");
+              
         
         
     
