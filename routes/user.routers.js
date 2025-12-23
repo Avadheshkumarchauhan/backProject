@@ -6,7 +6,8 @@ import
   logout,
   getProfile,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  chagePassword
 } from '../controllers/user.controller.js';
 import { isLoggedIn } from '../middlewares/auth.middleware.js';
 import { upload } from '../middlewares/multer.middleware.js';

@@ -243,4 +243,5 @@ export {
     getProfile,
     forgotPassword,
     resetPassword,
+    chagePassword,
 }
