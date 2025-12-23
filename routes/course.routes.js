@@ -1,4 +1,5 @@
 import { Router } from "express";
+import {isLoggedIn} from "../middlewares/auth.middleware.js"
 import
 {getAllCoures,
 getLecturesByCourseId,    
@@ -7,6 +8,6 @@ getLecturesByCourseId,
 const router = new Router();
 
 router.route("/").get(getAllCoures);
-router.route("/:id").get(getLecturesByCourseId);
+router.route("/:id").get(isLoggedIn,getLecturesByCourseId);
 
 export default router;

@@ -130,7 +130,7 @@ const getProfile = async (req,res,next) =>{
         user
       });
   } catch (error) {
-    return next(new ApiError("Failed to fetch profile",500));
+    return next(new ApiError(error.message,500));
   }
 }
 
