@@ -22,6 +22,7 @@ routers.get('/logout',isLoggedIn,logout);
 routers.get('/profile',isLoggedIn,getProfile);
 routers.post("forgot-password", forgotPassword);
 routers.post("reset-password/:resetToken", resetPassword);
+routers.post("Change-passwors",isLoggedIn ,chagePassword)
 
 
 

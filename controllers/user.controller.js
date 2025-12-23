@@ -202,7 +202,37 @@ const resetPassword = async (req,res,next) => {
         });
 
     } catch (error) {
-        return next(new ApiError(error.message,500))
+        return next(new ApiError(error.message,500));
+    }
+}
+const chagePassword = async(req, res,next) =>{
+    try {
+        const {oldPassword,newPassword} = req.body;
+
+        if(!oldPassword || !newPassword){
+            return next(new ApiError("All fields are required ",400));
+        }
+        const user = await User.findById(req.user._id).select("+pssword");
+        if(!user){
+            return next(new ApiError("User does nit exist ",400));
+
+        }
+        const isPasswordValid =user.comparePassword(oldPassword);
+
+        if(!isPasswordValid){
+            return next(new ApiError("Invalid old password "));
+        }
+        user.password= newPassword;
+        user.save({validateBeforeSave:false});
+        user.password= undefined
+
+        return res.status(200).json({
+            success:true,
+            message: "Password changed successfully"
+        })
+        
+    } catch (error) {
+        return next(new ApiError(error.message,500));
     }
 }
 
