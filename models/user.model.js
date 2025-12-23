@@ -3,9 +3,10 @@ config({path:"./.env",
     quiet:true
 });
 import {Schema, model} from 'mongoose';
-import { type } from 'os';
+
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 const userSchema = new Schema({
 
@@ -47,7 +48,7 @@ const userSchema = new Schema({
         type:'String'
     },
     forgotPasswordExpiry:{
-        type:'String'
+        type:Date
     },
 
 },{
@@ -70,12 +71,28 @@ userSchema.methods =  {
 
         )
     },
+}
+userSchema.methods.comparePassword = async function (password) {
 
-    comparePassword: async function (password) {
-        return await bcrypt.compare(password, this.password)
-    }
+        return await bcrypt.compare(password, this.password);
 
 }
+
+userSchema.methods.generatePasswordResetToken = async function() {
+
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    
+    this.forgotPasswordToken = crypto
+        .createHash("sha256")
+        .update(resetToken)
+        .digest("hex")
+
+    this.forgotPasswordExpiry = Date.now() +(15 * 60 * 1000);
+
+    return resetToken;
+}
+
+
 
 
 
