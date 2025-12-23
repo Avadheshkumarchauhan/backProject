@@ -7,7 +7,8 @@ import
   getProfile,
   forgotPassword,
   resetPassword,
-  chagePassword
+  chagePassword,
+  updateUser
 } from '../controllers/user.controller.js';
 import { isLoggedIn } from '../middlewares/auth.middleware.js';
 import { upload } from '../middlewares/multer.middleware.js';
@@ -24,6 +25,7 @@ routers.get('/profile',isLoggedIn,getProfile);
 routers.post("forgot-password", forgotPassword);
 routers.post("reset-password/:resetToken", resetPassword);
 routers.post("Change-passwors",isLoggedIn ,chagePassword)
+routers.patch("update",isLoggedIn ,upload.single("avatar"),updateUser);
 
 
 

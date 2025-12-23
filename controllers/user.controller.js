@@ -1,10 +1,11 @@
 import { config } from 'dotenv';
 import ApiError from '../utils/error.util.js';
 import {User} from "../models/user.model.js"
-import { uploadOnCloudinary } from '../utils/cloudinary.js';
+import { destroy, uploadOnCloudinary } from '../utils/cloudinary.js';
 import bcrypt from 'bcryptjs';
 import crypto from "crypto";
 import sendEmail from '../utils/sendEmail.js';
+
 
 config({
     quiet: true,
@@ -212,7 +213,7 @@ const chagePassword = async(req, res,next) =>{
         if(!oldPassword || !newPassword){
             return next(new ApiError("All fields are required ",400));
         }
-        const user = await User.findById(req.user._id).select("+pssword");
+        const user = await User.findById(req.user?._id).select("+pssword");
         if(!user){
             return next(new ApiError("User does nit exist ",400));
 
@@ -235,6 +236,37 @@ const chagePassword = async(req, res,next) =>{
         return next(new ApiError(error.message,500));
     }
 }
+const updateUser = async(req,res,next) =>{
+    try 
+    {
+        const {fullName} = req.body;
+    
+        const user = await User.findById(req.user?._id);
+        if(req.fullName){
+        user.fullName= fullName;
+        }
+        if(req.file)
+        {
+            const avatar = uploadOnCloudinary(req.file.path)
+            if(!avatar){
+                return next(new ApiError("Error while uploading  on cloudinary"))
+            }
+            destroy(user.avatar.public_id);
+            user.avatar.public_id= avatar.public_id;
+            user.avatar.secure_url = avatar.secure_url;
+        }  
+
+        await user.save({validateBeforeSave:false});
+        return res.status(200).json({
+            success:true,
+            message:"User datails updated successfully "
+        })
+       
+    } 
+    catch (error) {
+        return next(new ApiError(error.message,500));
+    }
+}
 
 export {
     register,
@@ -244,4 +276,5 @@ export {
     forgotPassword,
     resetPassword,
     chagePassword,
+    updateUser,
 }
