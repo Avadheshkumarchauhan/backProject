@@ -3,6 +3,7 @@ import cors from'cors';
 import morgan from 'morgan';
 import cookieParser from'cookie-parser';
 import userRoutes  from './routes/user.routers.js';
+import courseRoutes from "./routes/course.routes.js"
 import errorMiddleware from './middlewares/error.middleware.js';
 import { config } from 'dotenv';
 config({
@@ -28,6 +29,7 @@ app.use('/pong',(req,res)=>{
     res.send('<h1>Pong </h1>')
 });
 app.use('/api/v1/user',userRoutes);
+app.use('/api/v1/courses',courseRoutes);
 
 app.use((req,res)=>{
     res.status(400).send('OPPS !! 404 page not found')
