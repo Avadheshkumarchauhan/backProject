@@ -32,3 +32,14 @@ export const isLoggedIn = async (req, res, next) =>{
    }
    
 }
+export const authorizedRoles = (...roles) =>async (req, res, next) =>{
+try {
+    const currentUserRole = req.user.role;
+    if(!roles.includes(currentUserRole)){
+       return next(new ApiError("You do not have permission to access this route ",403));
+    }
+    next();
+} catch (error) {
+     return next(new ApiError(error.message,500)); 
+}
+}
