@@ -11,7 +11,7 @@ const getAllCoures = async(req,res,next) =>{
     }
     return res.status(200).json({
         success:true,
-        message:"All courses ",
+        message:"All courses fetch successfully ",
         courses
     })
 
@@ -42,21 +42,25 @@ const getLecturesByCourseId = async(req,res,next) =>{
 const createCourse = async(req, res, next) =>{
     try {
         const {title, description, category, createdBy} = req.body;
-        const{localPath} = req.file.path;
+        
         if(!title || !description || !category || !createdBy){
             return next(new ApiError("All fields are required",400));  
-        }
-        if (!localPath) {
+        }     
+        const{path} = req.file;
+               
+        if (!path) {
              return next(new ApiError("Thumbnail is meassing",400));
         }
-        const thumbnail =uploadOnCloudinary(localPath);
+        const thumbnail = await uploadOnCloudinary(path);
+      
+        
         if(!thumbnail.url){
             return next("Error while uploading  thumbnail on cloudinary ",400);  
         }
         const course = await Course.create({
             title, description, category, createdBy,
             thumbnail:{
-                public_id:title,
+                public_id:thumbnail.public_id,
                 secure_url:thumbnail.url
             },
         });

@@ -34,7 +34,10 @@ config({
         }
     }
     const destroy = async(id) =>{
-         await cloudinary.v2.uploader.destroy(id);
+        if(!id) return;
+         const res= await cloudinary.uploader.destroy(id);
+         
+         
     }
 
 export {uploadOnCloudinary,destroy}

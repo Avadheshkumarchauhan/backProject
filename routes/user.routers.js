@@ -21,11 +21,11 @@ routers.post('/register',
       ),register);
 routers.post('/login',login);
 routers.get('/logout',isLoggedIn,logout);
-routers.get('/profile',isLoggedIn,getProfile);
-routers.post("forgot-password", forgotPassword);
-routers.post("reset-password/:resetToken", resetPassword);
-routers.post("Change-passwors",isLoggedIn ,chagePassword)
-routers.patch("update",isLoggedIn ,upload.single("avatar"),updateUser);
+routers.get('/me',isLoggedIn,getProfile);
+routers.post("/forgot-password", forgotPassword);
+routers.post("/reset-password/:resetToken", resetPassword);
+routers.post("/change-password",isLoggedIn ,chagePassword)
+routers.patch("/update/:id",isLoggedIn ,upload.single("avatar"),updateUser);
 
 
 

@@ -3,9 +3,11 @@ config({
     path:"./.env",
     quiet:true
     
-})
+});
+import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import ApiError from "../utils/error.util.js";
+import { log } from "node:console";
 
 
 export const isLoggedIn = async (req, res, next) =>{
@@ -20,7 +22,8 @@ export const isLoggedIn = async (req, res, next) =>{
      //console.log("token: ", token);
      
      const userDetail = await jwt.verify(token,process.env.JWT_SECRET);
-     //console.log(userDetail);
+        
+        
      
      req.user = userDetail;
 
@@ -33,8 +36,10 @@ export const isLoggedIn = async (req, res, next) =>{
    
 }
 export const authorizedRoles = (...roles) =>async (req, res, next) =>{
-try {
-    const currentUserRole = req.user.role;
+try {const user = await User.findById(req.user._id);
+    
+    const currentUserRole = user.role;
+
     if(!roles.includes(currentUserRole)){
        return next(new ApiError("You do not have permission to access this route ",403));
     }

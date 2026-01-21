@@ -21,8 +21,8 @@ router.route("/")
 
 router.route("/:id")
     .get(isLoggedIn,getLecturesByCourseId)
-    .putch(isLoggedIn,authorizedRoles("ADMIN"), updateCourse)
+    .patch(isLoggedIn,authorizedRoles("ADMIN"), updateCourse)
     .delete(isLoggedIn, authorizedRoles("ADMIN"), removeCourse)
-    .post(isLoggedIn,authorizedRoles("ADMIN"),upload("lecture"),addLectureToCourseById);
+    .post(isLoggedIn,authorizedRoles("ADMIN"),upload.single("lecture"),addLectureToCourseById);
 
 export default router;

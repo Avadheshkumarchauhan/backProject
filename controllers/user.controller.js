@@ -31,7 +31,7 @@ const register = async (req,res ,next) =>{
             return next(new ApiError("Email already exists ",400));
         }
     
-         const avatarLocalpath = req.file.path;
+         const {avatarLocalpath} = req.file.path;
        
     
         if(!avatarLocalpath){
@@ -45,7 +45,7 @@ const register = async (req,res ,next) =>{
         const user =await User.create({
             fullName, email,password,avatar:
             {
-                public_id:email,
+                public_id:avatar.public_id,
                 secure_url:avatar.url
             }
         });
@@ -122,8 +122,7 @@ const getProfile = async (req,res,next) =>{
       const userId= req.user._id;
      
       
-      const user = await User.findById(userId);
-      
+      const user = await User.findById(userId);    
      return res.status(200)
       .json({
         success:true,
@@ -241,18 +240,22 @@ const updateUser = async(req,res,next) =>{
     try 
     {
         const {fullName} = req.body;
-    
-        const user = await User.findById(req.user?._id);
-        if(req.fullName){
+       
+        const {id} =req.params;
+       
+        const{path} =req.file    
+        const user = await User.findById(id);
+        if(fullName){
         user.fullName= fullName;
         }
-        if(req.file)
-        {
-            const avatar = uploadOnCloudinary(req.file.path)
+       
+        if(path)
+        {          
+            const avatar =await uploadOnCloudinary(path)
             if(!avatar){
                 return next(new ApiError("Error while uploading  on cloudinary"))
             }
-            destroy(user.avatar.public_id);
+            await destroy(user.avatar.public_id);
             user.avatar.public_id= avatar.public_id;
             user.avatar.secure_url = avatar.secure_url;
         }  
@@ -261,7 +264,7 @@ const updateUser = async(req,res,next) =>{
         return res.status(200).json({
             success:true,
             message:"User datails updated successfully "
-        })
+        });
        
     } 
     catch (error) {

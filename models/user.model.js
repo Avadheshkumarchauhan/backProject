@@ -65,7 +65,7 @@ userSchema.pre("save", async function (next) {
 userSchema.methods =  {
     generateToken(){
         return jwt.sign(
-            {_id:this._id,email:this.email},
+            {_id:this._id,email:this.email,role:this.role},
             process.env.JWT_SECRET,
             {expiresIn:process.env.JWT_EXPIRY}
 
