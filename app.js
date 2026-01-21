@@ -21,7 +21,7 @@ app.use(cors({
     credentials:true
 }));
 app.use(cookieParser());
-app.use(morgan('dev'))
+app.use(morgan('dev'));
 // app.get('/',(req,res)=>{
 //     res.send('<h1>Hello </h1>')
 //});
