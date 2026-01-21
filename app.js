@@ -22,9 +22,10 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use(morgan('dev'))
-app.get('/',(req,res)=>{
-    res.send('<h1>Hello </h1>')
-});
+// app.get('/',(req,res)=>{
+//     res.send('<h1>Hello </h1>')
+//});
+app.use(express.static("dist"));
 app.use('/pong',(req,res)=>{
     res.send('<h1>Pong </h1>')
 });
