@@ -14,9 +14,9 @@ config({
 
 
 const option = {
-   // maxAge: 2*60*60*1000*24,
+   maxAge: 2*60*60*1000*24,
     httpOnly:true,
-    secure:false
+    secure:true
 }
 
 const register = async (req,res ,next) =>{
