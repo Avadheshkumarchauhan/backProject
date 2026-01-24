@@ -104,6 +104,10 @@ const logout = async (req,res) =>{
 
   try 
     {
+        const option = {
+                httpOnly:true,
+                secure:true
+        }
      return res.status(200).
       clearCookie("token",option)
       .json({
